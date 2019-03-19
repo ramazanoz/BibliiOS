@@ -1,0 +1,54 @@
+//
+//  Type.swift
+//  BibliOS
+//
+//  Created by Salih Topcu on 8.03.2019.
+//  Copyright © 2019 Akead Bilişim. All rights reserved.
+//
+
+import Foundation
+
+//public typealias KVP = (key: String, value: Any)
+public typealias MetaObject = [String: Any]
+
+public typealias MetaArray = [MetaObject]
+
+public typealias SomeAction = () -> Void
+
+public class Currency {
+    private var _name: String
+    public var name: String {
+        return self._name
+    }
+    private var _code: String
+    public var code: String {
+        return self._code
+    }
+    private var _symbol: String
+    public var symbol: String {
+        return self._symbol
+    }
+    
+    private init(name: String, code: String, symbol: String) {
+        self._name = name
+        self._code = code
+        self._symbol = symbol
+    }
+    
+    public static let euro = Currency(name: "Euro", code: "EUR", symbol: "€")
+    public static let tl = Currency(name: "Türk Lirası", code: "TL", symbol: "₺")
+    public static let usd = Currency(name: "U.S. Dollar", code: "USD", symbol: "$")
+    public static let unknown = Currency(name: "Unknown", code: "UNKNOWN", symbol: "*")
+    
+    private static let list: [Currency] = [Currency.euro, Currency.tl, Currency.usd]
+    
+    public static func getWith(code: String) -> Currency {
+        let filterResult = Currency.list.filter { $0.code == code }
+        return filterResult.count > 0 ? filterResult[0] : Currency.unknown
+    }
+    
+    public static func getWith(symbol: String) -> Currency {
+        let filterResult = Currency.list.filter { $0.symbol == symbol }
+        return filterResult.count > 0 ? filterResult[0] : Currency.unknown
+    }
+}

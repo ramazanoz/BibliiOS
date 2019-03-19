@@ -1,0 +1,11 @@
+framework module BibliOS {
+  umbrella header "BibliOS.h"
+
+  export *
+  module * { export * }
+}
+
+module BibliOS.Swift {
+    header "BibliOS-Swift.h"
+    requires objc
+}

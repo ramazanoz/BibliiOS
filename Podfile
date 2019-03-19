@@ -6,6 +6,6 @@ target 'BibliOS' do
   use_frameworks!
 
   # Pods for BibliOS
-  pod 'Alamofire', '~> 4.7.3'
+  # pod 'Alamofire', '~> 4.7.3'
 
 end

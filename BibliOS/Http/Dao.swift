@@ -13,16 +13,22 @@ public protocol DaoDelegate: NSObjectProtocol {
 }
 
 public extension DaoDelegate {
-    public func dao(didFail dao: Dao, error: DaoError?) { }
+    public func dao(didFail dao: Dao, error: DaoError) { }
 }
 
-public class Dao: NSObject {
+public typealias DaoSuccessAction = (_ dao: Dao, _ data: Any?) -> Void
+
+public typealias DaoFailAction = (_ dao: Dao, _ error: DaoError) -> Void
+
+open class Dao: NSObject {
     var url: String
     var method: HTTPMethod
     var headers: [String: String] = [:]
     var urlData: [String: String] = [:]
-    var bodyData: KVP = KVP()
+    var bodyData: MetaObject = MetaObject()
     var delegate: DaoDelegate?
+    private var successAction: DaoSuccessAction?
+    private var failAction: DaoFailAction?
     
     var _finalUrl: String?
     var finalUrl: String {
@@ -38,8 +44,6 @@ public class Dao: NSObject {
         return self._finalUrl!
     }
     
-    
-    
     // override and run the http request here
     public func execute() { }
     
@@ -47,6 +51,13 @@ public class Dao: NSObject {
         self.url = url
         self.method = method
         self.delegate = delegate
+    }
+    
+    init(url: String, method: HTTPMethod, successAction: DaoSuccessAction?, failAction: DaoFailAction?) {
+        self.url = url
+        self.method = method
+        self.successAction = successAction
+        self.failAction = failAction
     }
     
     public func addUrlData(key: String, value: Any) {
@@ -74,30 +85,48 @@ public class Dao: NSObject {
         self.bodyData.updateValue(value, forKey: key)
     }
     
-    public func setBodyData(_ data: KVP) {
+    public func setBodyData(_ data: MetaObject) {
         self.bodyData = data
+    }
+    
+    // Override to customize
+    public func pause() { }
+    
+    // Override to customize
+    public func resume() { }
+    
+    // Override to customize
+    public func cancel() { }
+    
+    // Override to customize
+    open func requestDidSuccess(_ data: Any? = nil) {
+        self.delegate?.dao(didSuccess: self, data: data) ?? self.successAction?(self, data)
+        debugPrint(String(describing: self.classForCoder) + " / requestDidSuccess")
+    }
+    
+    // Override to customize
+    open func requestDidFail(_ error: DaoError) {
+        self.delegate?.dao(didFail: self, error: error) ?? self.failAction?(self, error)
+        debugPrint(String(describing: self.classForCoder) + " / requestDidFail")
+        self.cancel()
     }
     
 }
 
-public class DaoError {
-    public var code: HTTPCode
+open class DaoError {
+    public var code: Int
     private var _message: String?
     public var message: String {
-        return self._message ?? self.getMessage() ?? HTTPCode.getMessage(of: self.code) ?? ""
+        return self._message ?? self.getMessage() ?? HTTPCode.getMessage(of: HTTPCode(rawValue: self.code) ?? .none)
     }
     
-    init(code: HTTPCode, message: String? = nil) {
+    public init(code: Int, message: String? = nil) {
         self.code = code
         self._message = message
     }
     
-    convenience init(intCode: Int, message: String? = nil) {
-        self.init(code: HTTPCode(rawValue: intCode) ?? .none, message: message)
-    }
-    
     // Override to customize message
-    func getMessage() -> String? {
+    open func getMessage() -> String? {
         return nil
     }
 }

@@ -8,11 +8,11 @@
 
 import Alamofire
 
-public class AlamofireDao: Dao {
+open class AlamofireDao: Dao {
     private var request: DataRequest?
     var encoding: ParameterEncoding = URLEncoding.default
     
-    override init(url: String, method: HTTPMethod, delegate: DaoDelegate?) {
+    public override init(url: String, method: HTTPMethod, delegate: DaoDelegate?) {
         super.init(url: url, method: method, delegate: delegate)
         if (method == .post || method == .put) {
             self.encoding = JSONEncoding.default
@@ -21,12 +21,8 @@ public class AlamofireDao: Dao {
     
     public override func execute() {
         self.request = SessionManager.default.daoRequest(super.finalUrl, method: Alamofire.HTTPMethod(rawValue: super.method.rawValue) ?? .get, parameters: super.bodyData, encoding: self.encoding, headers: super.headers, disableCache: true)
-        self.startJsonRequest()
-    }
-    
-    private func startJsonRequest() {
         self.request!.responseJSON() { response in
-            let data: Any? = response.result.value as? KVPArray ?? response.result.value as? [KVPArray] ?? nil
+            let data: Any? = response.result.value as? MetaObject ?? response.result.value as? MetaArray ?? nil
             let error: DaoError? = self.handleError(response: response, data: data)
             if error == nil {
                 self.requestDidSuccess(data)
@@ -36,29 +32,16 @@ public class AlamofireDao: Dao {
         }
     }
     
-    func pause() {
+    override public func pause() {
         self.request?.suspend()
     }
     
-    func resume() {
+    override public func resume() {
         self.request?.resume()
     }
     
-    func cancel() {
+    override public func cancel() {
         self.request?.cancel()
-    }
-    
-    // Override to customize
-    func requestDidSuccess(_ data: Any? = nil) {
-        super.delegate?.dao(didSuccess: self, data: data)
-        debugPrint(String(describing: self.classForCoder) + " / requestDidSuccess")
-    }
-    
-    // Override to customize
-    func requestDidFail(_ error: DaoError) {
-        super.delegate?.dao(didFail: self, error: error)
-        debugPrint(String(describing: self.classForCoder) + " / requestDidFail")
-        self.cancel()
     }
     
     // MARK: - Error Handling Methods
@@ -66,23 +49,23 @@ public class AlamofireDao: Dao {
     private func handleError(response: DataResponse<Any>, data: Any?) -> DaoError? {
         var error: DaoError?
         if response.result.isSuccess {
-            if data is KVP {
-                error = self.handleDataError(data as! KVP)
+            if data is MetaObject {
+                error = self.handleDataError(data as! MetaObject)
                 if error != nil {
-                    NSLog("\n---- DATA ERROR ----\nCODE:\(error!.code.rawValue) \nMESSAGE:\(error!.message) \nDATA:\(String(describing: String.init(data: response.data!, encoding: .utf8)))")
+                    NSLog("\n---- DATA ERROR ----\nCODE:\(error!.code) \nMESSAGE:\(error!.message) \nDATA:\(String(describing: String.init(data: response.data!, encoding: .utf8)))")
                 }
             }
         } else {
             if response.response == nil {
-                error = DaoError(intCode: 0, message: "No response!")
+                error = DaoError(code: 0, message: "No response!")
             } else {
 //                error = self.handleResponseError(response.response!)
             }
             if error != nil {
                 if response.data == nil {
-                    NSLog("\n---- DATA ERROR ----\nCODE:\(error!.code.rawValue) \nMESSAGE:\(error!.message)")
+                    NSLog("\n---- DATA ERROR ----\nCODE:\(error!.code) \nMESSAGE:\(error!.message)")
                 } else {
-                    NSLog("\n---- DATA ERROR ----\nCODE:\(error!.code.rawValue) \nMESSAGE:\(error!.message) \nDATA:\(String(describing: String.init(data: response.data!, encoding: .utf8)))")
+                    NSLog("\n---- DATA ERROR ----\nCODE:\(error!.code) \nMESSAGE:\(error!.message) \nDATA:\(String(describing: String.init(data: response.data!, encoding: .utf8)))")
                 }
             }
         }
@@ -90,7 +73,7 @@ public class AlamofireDao: Dao {
     }
 
     // Override to customize
-    func handleDataError(_ data: KVP) -> DaoError? {
+    func handleDataError(_ data: MetaObject) -> DaoError? {
         return nil
     }
     
