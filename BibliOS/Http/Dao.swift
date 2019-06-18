@@ -13,7 +13,7 @@ public protocol DaoDelegate: NSObjectProtocol {
 }
 
 public extension DaoDelegate {
-    public func dao(didFail dao: Dao, error: DaoError) { }
+    func dao(didFail dao: Dao, error: DaoError) { }
 }
 
 public typealias DaoSuccessAction = (_ dao: Dao, _ data: Any?) -> Void
