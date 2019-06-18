@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		178EE6D322B8216D0081B0E0 /* SLHSimpleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178EE6CA22B8216D0081B0E0 /* SLHSimpleTableView.swift */; };
 		6F000DE32237D6BF0075CD16 /* AKPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F000DE22237D6BF0075CD16 /* AKPickerView.swift */; };
 		6F000DE52237D7400075CD16 /* APJTextPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F000DE42237D7400075CD16 /* APJTextPickerView.swift */; };
 		6F000DE72237D77E0075CD16 /* SLHQuantityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F000DE62237D77E0075CD16 /* SLHQuantityPickerView.swift */; };
@@ -80,6 +81,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		178EE6CA22B8216D0081B0E0 /* SLHSimpleTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLHSimpleTableView.swift; sourceTree = "<group>"; };
 		6F000DE22237D6BF0075CD16 /* AKPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AKPickerView.swift; sourceTree = "<group>"; };
 		6F000DE42237D7400075CD16 /* APJTextPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APJTextPickerView.swift; sourceTree = "<group>"; };
 		6F000DE62237D77E0075CD16 /* SLHQuantityPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLHQuantityPickerView.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				6F000DE42237D7400075CD16 /* APJTextPickerView.swift */,
 				6F000DE62237D77E0075CD16 /* SLHQuantityPickerView.swift */,
 				6F000DE82237D7FD0075CD16 /* SLHSigningView.swift */,
+				178EE6CA22B8216D0081B0E0 /* SLHSimpleTableView.swift */,
 				6F000DEA2237D9AE0075CD16 /* SLHTableView.swift */,
 				6F000DEC2237D9F70075CD16 /* SLHTabView.swift */,
 			);
@@ -262,7 +265,7 @@
 		6F83936722328F5C007211C1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Akead Bilişim";
 				TargetAttributes = {
 					6F83936F22328F5C007211C1 = {
@@ -277,6 +280,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 6F83936622328F5C007211C1;
 			productRefGroup = 6F83937122328F5C007211C1 /* Products */;
@@ -397,6 +401,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				178EE6D322B8216D0081B0E0 /* SLHSimpleTableView.swift in Sources */,
 				6F000DE92237D7FD0075CD16 /* SLHSigningView.swift in Sources */,
 				6F8393932232B1D1007211C1 /* AlamofireDao.swift in Sources */,
 				6F000DE72237D77E0075CD16 /* SLHQuantityPickerView.swift in Sources */,
@@ -546,7 +551,7 @@
 			baseConfigurationReference = A0099A0E7473FEAF7B4AD9C0 /* Pods-BibliOS.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -581,7 +586,7 @@
 			baseConfigurationReference = 9D22F388F18BF7DCAD04AAC1 /* Pods-BibliOS.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";

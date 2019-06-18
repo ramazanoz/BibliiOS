@@ -112,17 +112,17 @@ public extension CALayer {
 
 public extension Array {
     
-    public func forEach(_ doThis: (_ item: Element) -> Void) {
+    func forEach(_ doThis: (_ item: Element) -> Void) {
         for i in self {
             doThis(i)
         }
     }
     
-    public func getItem(at index: Int) -> Any? {
+    func getItem(at index: Int) -> Any? {
         return self.count > index ? self[index] : nil
     }
     
-    public func toString(container: String = "", seperator: String = ",") -> String {
+    func toString(container: String = "", seperator: String = ",") -> String {
         var result = ""
         for i in 0..<self.count {
             result += container + "\(self[i])" + container
@@ -227,7 +227,11 @@ public extension String {
         let lang = languageCode.isNotEmpty ? languageCode : "en"
         let path = Bundle.main.path(forResource: lang, ofType: "lproj")
         let bundle = path != nil ? Bundle(path: path!) : nil
-        return bundle != nil ? NSLocalizedString(self, tableName: nil, bundle: bundle!, value:"", comment: "") : self
+        return bundle != nil ? self.localize(bundle: bundle!) : self
+    }
+    
+    func localize(bundle: Bundle) -> String {
+        return NSLocalizedString(self, tableName: nil, bundle: bundle, value:"", comment: "")
     }
     
     func uppercase(languageCode: String = "en") -> String {
@@ -444,6 +448,17 @@ public extension UILabel {
     
 }
 
+public extension UINavigationController {
+    func popAllViewConterollers(animated: Bool) {
+        let viewControllers: [UIViewController]? = self.navigationController?.viewControllers
+        if viewControllers != nil {
+            for i in viewControllers!.count...1 {
+                self.navigationController!.popToViewController(viewControllers![i - 1], animated: animated)
+            }
+        }
+    }
+}
+
 public extension UISwitch {
     
     var isOff: Bool { return !self.isOn }
@@ -578,7 +593,7 @@ public extension UIView {
 
 public extension UIViewController {
     
-    public func dismissPresentedViewController(animated: Bool = false, forceToDismiss: Bool = true, completion: (() -> Void)? = nil) {
+    func dismissPresentedViewController(animated: Bool = false, forceToDismiss: Bool = true, completion: (() -> Void)? = nil) {
         debugPrint("UIViewController.dismissPresentedViewController")
         if self.presentedViewController == nil {
             debugPrint("no presentedViewController")
@@ -598,11 +613,11 @@ public extension UIViewController {
         }
     }
     
-    public func isPresented(ownerViewController: UIViewController) -> Bool {
+    func isPresented(ownerViewController: UIViewController) -> Bool {
         return self.isBeingPresented || ownerViewController.presentedViewController == self
     }
     
-    public func isDismissed(ownerViewController: UIViewController) -> Bool {
+    func isDismissed(ownerViewController: UIViewController) -> Bool {
         return self.isBeingDismissed || ownerViewController.presentedViewController != self
     }
     
