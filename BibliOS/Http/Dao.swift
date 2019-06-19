@@ -8,13 +8,19 @@
 
 import Foundation
 
-public protocol DaoDelegate: NSObjectProtocol {
+//public protocol DaoDelegate: NSObjectProtocol {
+//    func dao(didSuccess dao: Dao, data: Any?)
+//}
+
+public protocol DaoDelegate {
     func dao(didSuccess dao: Dao, data: Any?)
+    
+    func dao(didFail dao: Dao, error: DaoError)
 }
 
-public extension DaoDelegate {
-    func dao(didFail dao: Dao, error: DaoError) { }
-}
+//public extension DaoDelegate {
+//    func dao(didFail dao: Dao, error: DaoError) { }
+//}
 
 public typealias DaoSuccessAction = (_ dao: Dao, _ data: Any?) -> Void
 
@@ -113,20 +119,25 @@ open class Dao: NSObject {
     
 }
 
-open class DaoError {
-    public var code: Int
-    private var _message: String?
-    public var message: String {
-        return self._message ?? self.getMessage() ?? HTTPCode.getMessage(of: HTTPCode(rawValue: self.code) ?? .none)
-    }
-    
-    public init(code: Int, message: String? = nil) {
-        self.code = code
-        self._message = message
-    }
-    
-    // Override to customize message
-    open func getMessage() -> String? {
-        return nil
-    }
+public protocol DaoError {
+    var code: Int { get }
+    var message: String { get }
 }
+
+//open class DaoError {
+//    public var code: Int
+//    private var _message: String?
+//    public var message: String {
+//        return self._message ?? self.getMessage() ?? HTTPCode.getMessage(of: HTTPCode(rawValue: self.code) ?? .none)
+//    }
+//
+//    public init(code: Int, message: String? = nil) {
+//        self.code = code
+//        self._message = message
+//    }
+//
+//    // Override to customize message
+//    open func getMessage() -> String? {
+//        return nil
+//    }
+//}

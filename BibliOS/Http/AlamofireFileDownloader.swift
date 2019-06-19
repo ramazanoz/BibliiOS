@@ -8,7 +8,7 @@
 
 import Alamofire
 
-public class FileDownloader: Dao {
+public class AlamofireFileDownloader: Dao {
     private var request: DataRequest!
     
     public init(url: String, successAction: @escaping DaoSuccessAction, failAction: DaoFailAction?) {
@@ -21,7 +21,7 @@ public class FileDownloader: Dao {
             if response.data != nil {
                 super.requestDidSuccess(response.data)
             } else {
-                super.requestDidFail(DaoError(code: HTTPCode.notFound.rawValue))
+                super.requestDidFail(AlamofireDaoError(code: HTTPCode.notFound.rawValue, message: nil))
             }
         })
     }
