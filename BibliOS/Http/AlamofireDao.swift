@@ -57,9 +57,9 @@ open class AlamofireDao: Dao {
             }
         } else {
             if response.response == nil {
-                error = DaoError(code: 0, message: "No response!")
+                error = AlamofireDaoError(code: 0, message: "No response")
             } else {
-//                error = self.handleResponseError(response.response!)
+                error = self.handleResponseError(response: response.response!) ?? AlamofireDaoError(code: 0, message: "Unhandled error")
             }
             if error != nil {
                 if response.data == nil {
@@ -73,10 +73,16 @@ open class AlamofireDao: Dao {
     }
 
     // Override to customize
-    func handleDataError(_ data: MetaObject) -> DaoError? {
+    open func handleDataError(_ data: MetaObject) -> DaoError? {
         return nil
     }
     
+    private func handleResponseError(response: HTTPURLResponse) -> AlamofireDaoError? {
+        if response.statusCode != HTTPCode.ok.rawValue || response.statusCode != HTTPCode.created.rawValue || response.statusCode != HTTPCode.accepted.rawValue {
+            return AlamofireDaoError(code: response.statusCode, message: nil)
+        }
+        return nil
+    }
 }
 
 extension Alamofire.SessionManager {
@@ -108,5 +114,15 @@ extension Alamofire.SessionManager {
 extension Alamofire.HTTPMethod {
     public static func initFrom(_ method: HTTPMethod) -> Alamofire.HTTPMethod {
         return Alamofire.HTTPMethod(rawValue: method.rawValue) ?? .get
+    }
+}
+
+open class AlamofireDaoError: DaoError {
+    public var code: Int
+    public var message: String
+    
+    public required init(code: Int, message: String?) {
+        self.code = code
+        self.message = message ?? HTTPCode.getMessage(of: HTTPCode(rawValue: code) ?? .none)
     }
 }
