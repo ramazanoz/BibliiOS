@@ -489,7 +489,7 @@ public extension UIView {
     
     var right: CGFloat {
         get { return self.left + self.width }
-        set(value) { self.left = value + self.width }
+        set(value) { self.left = value - self.width }
     }
     
     var top: CGFloat {

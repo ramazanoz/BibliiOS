@@ -78,7 +78,7 @@ open class AlamofireDao: Dao {
     }
     
     private func handleResponseError(response: HTTPURLResponse) -> AlamofireDaoError? {
-        if response.statusCode != HTTPCode.ok.rawValue || response.statusCode != HTTPCode.created.rawValue || response.statusCode != HTTPCode.accepted.rawValue {
+        if response.statusCode != HTTPCode.ok.rawValue && response.statusCode != HTTPCode.created.rawValue && response.statusCode != HTTPCode.accepted.rawValue {
             return AlamofireDaoError(code: response.statusCode, message: nil)
         }
         return nil

@@ -1,9 +1,9 @@
 //
 //  SLHTableView.swift
-//  SafranStore
+//  BibliOS
 //
-//  Created by RDC Partner on 27.05.2015.
-//  Copyright (c) 2015 RDC Partner. All rights reserved.
+//  Created by Salih Topcu on 27.05.2015.
+//  Copyright © 2019 Salih Topcu. All rights reserved.
 //
 
 import UIKit

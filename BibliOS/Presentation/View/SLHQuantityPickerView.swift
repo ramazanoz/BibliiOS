@@ -8,12 +8,24 @@
 
 import UIKit
 
-@objc protocol SLHQuantityPickerViewDelegate : NSObjectProtocol {
-    @objc optional func quantityWillChange(_ quantityPickerView: SLHQuantityPickerView, value: Int) -> Bool
-    @objc func quantityDidChange(_ quantityPickerView: SLHQuantityPickerView, value: Int)
+public protocol SLHQuantityPickerViewDelegate {
+    
+    func mayQuantityChange(to value: Int, picker: SLHQuantityPickerView) -> Bool
+    
+    func quantityDidChange(to value: Int, picker: SLHQuantityPickerView)
+    
 }
 
-class SLHQuantityPickerView: UIView {
+extension SLHQuantityPickerViewDelegate {
+    
+    func mayQuantityChange(to value: Int, picker: SLHQuantityPickerView) -> Bool {
+        return true
+    }
+    
+}
+
+public class SLHQuantityPickerView: UIView {
+    
     public var minusButtonCanGoNegative = false
     public var delegate: SLHQuantityPickerViewDelegate?
     private var minusButton: UIButton!
@@ -42,11 +54,11 @@ class SLHQuantityPickerView: UIView {
     
     public var textColor: UIColor! {
         didSet {
-            self.number.titleLabel?.textColor = textColor
+            self.number.setTitleColor(textColor, for: .normal)
         }
     }
     
-    init(frame: CGRect, minusButtonImage: UIImage, plusButtonImage: UIImage) {
+    public init(frame: CGRect, minusButtonImage: UIImage, plusButtonImage: UIImage) {
         super.init(frame: frame)
         
         let buttonWidth = (frame.width / 11) * 3
@@ -56,6 +68,7 @@ class SLHQuantityPickerView: UIView {
         self.minusButton = UIButton(frame: CGRect(x: left, y: 0, width: buttonWidth, height: frame.height))
         self.minusButton.setImage(minusButtonImage, for: UIControl.State.normal)
         //        self.minusButton.imageView?.fitToSuperview()
+        self.minusButton.imageView?.contentMode = .center
         self.minusButton.addTarget(self, action: #selector(minusButtonAction), for: UIControl.Event.touchUpInside)
         self.addSubview(self.minusButton)
         left = buttonWidth
@@ -63,8 +76,7 @@ class SLHQuantityPickerView: UIView {
         self.number = UIButton(frame: CGRect(x: left, y: 2, width: labelWidth, height: frame.height - 2))
         self.number.addTarget(self, action: #selector(plusButtonAction), for: UIControl.Event.touchUpInside)
         self.number.titleLabel?.font = UIFont.boldSystemFont(ofSize: min(self.number.width, self.number.height) * 0.6)
-        //        self.number.backgroundColor = UIColor.darkGray
-        //        self.number.titleLabel?.textColor = UIColor.white
+        self.number.setTitleColor(UIColor.darkGray, for: .normal)
         self.addSubview(self.number)
         left = buttonWidth + labelWidth
         
@@ -79,6 +91,7 @@ class SLHQuantityPickerView: UIView {
         
         self.plusButton = UIButton(frame: CGRect(x: left, y: 0, width: buttonWidth, height: frame.height))
         self.plusButton.setImage(plusButtonImage, for: UIControl.State.normal)
+        self.plusButton.imageView?.contentMode = .scaleAspectFit
         self.plusButton.addTarget(self, action: #selector(plusButtonAction), for: UIControl.Event.touchUpInside)
         self.minusButton.setImage(minusButtonImage, for: UIControl.State.normal)
         self.addSubview(self.plusButton)
@@ -92,7 +105,6 @@ class SLHQuantityPickerView: UIView {
     
     // does not run delegate's quantityDidChange function
     public func setQuantity(_ value: Int) {
-        //        self.label.text = String(value)
         self.number.setTitle(String(value), for: UIControl.State.normal)
     }
     
@@ -101,30 +113,28 @@ class SLHQuantityPickerView: UIView {
         self.minusButton.isUserInteractionEnabled = false
         self.number.isUserInteractionEnabled = false
         self.plusButton.isUserInteractionEnabled = false
-        //        self.label.text = String(value)
-        self.number.setTitle(String(value), for: UIControl.State.normal)
-        if self.delegate != nil {
-            self.delegate!.quantityDidChange(self, value: self.getQuantity())
-        }
+        self.setQuantity(value)
+        self.delegate?.quantityDidChange(to: self.getQuantity(), picker: self)
         self.minusButton.isUserInteractionEnabled = true
         self.number.isUserInteractionEnabled = true
         self.plusButton.isUserInteractionEnabled = true
     }
     
     public func getQuantity() -> Int {
-        //        return Int(self.label.text!) ?? 0
         return Int((self.number.titleLabel?.text)!) ?? 0
     }
     
     @objc private func minusButtonAction() {
         if minusButtonCanGoNegative || self.getQuantity() != 0 {
-            if self.delegate?.quantityWillChange?(self, value: self.getQuantity() - 1) ?? true {
+            if self.delegate?.mayQuantityChange(to: self.getQuantity() - 1, picker: self) ?? true {
                 self.updateQuantity(self.getQuantity() - 1)
             }
         }
     }
     
     @objc private func plusButtonAction() {
-        self.updateQuantity(self.getQuantity() + 1)
+        if self.delegate?.mayQuantityChange(to: self.getQuantity() + 1, picker: self) ?? true {
+            self.updateQuantity(self.getQuantity() + 1)
+        }
     }
 }
