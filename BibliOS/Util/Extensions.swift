@@ -614,11 +614,15 @@ public extension UIViewController {
     }
     
     func isPresented(ownerViewController: UIViewController) -> Bool {
-        return self.isBeingPresented || ownerViewController.presentedViewController == self
+        return ownerViewController.presentedViewController != nil && ownerViewController.presentedViewController == self
     }
     
     func isDismissed(ownerViewController: UIViewController) -> Bool {
-        return self.isBeingDismissed || ownerViewController.presentedViewController != self
+        return ownerViewController.presentedViewController != self
+    }
+    
+    func isPresentable(viewController: UIViewController) -> Bool {
+        return self.presentedViewController == nil && self.presentingViewController == nil && !viewController.isBeingDismissed
     }
     
 }
