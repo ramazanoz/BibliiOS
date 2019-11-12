@@ -52,3 +52,24 @@ public class Currency {
         return filterResult.count > 0 ? filterResult[0] : Currency.unknown
     }
 }
+
+public struct AnchorSet {
+    let top: NSLayoutYAxisAnchor?
+    let right: NSLayoutXAxisAnchor?
+    let bottom: NSLayoutYAxisAnchor?
+    let left: NSLayoutXAxisAnchor?
+}
+
+public struct PaddingValueSet {
+    var top: CGFloat = 0
+    var right: CGFloat = 0
+    var bottom: CGFloat = 0
+    var left: CGFloat = 0
+    
+    public init(top: CGFloat = 0, right: CGFloat = 0, bottom: CGFloat = 0, left: CGFloat = 0) {
+        self.top = top
+        self.right = right
+        self.bottom = bottom
+        self.left = left
+    }
+}
