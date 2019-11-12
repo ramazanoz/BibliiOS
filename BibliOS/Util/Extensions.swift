@@ -28,7 +28,7 @@ public extension NSCoder {
     
 }
 
-extension URL {
+public extension URL {
     
     func deleteFile() {
         do {
@@ -589,6 +589,76 @@ public extension UIView {
         self.layer.mask = rectShape
     }
     
+    @discardableResult func setConstraints(anchorSet: AnchorSet, paddingValueSet: PaddingValueSet? = nil, enableInsets: Bool = false) -> (NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?) {
+        var topConstraint: NSLayoutConstraint?
+        var rightConstraint: NSLayoutConstraint?
+        var bottomConstraint: NSLayoutConstraint?
+        var leftConstraint: NSLayoutConstraint?
+        
+        var topInset = CGFloat(0)
+        var bottomInset = CGFloat(0)
+        
+        if #available(iOS 11, *), enableInsets {
+            let insets = self.safeAreaInsets
+            topInset = insets.top
+            bottomInset = insets.bottom
+        }
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
+        
+        if let top = anchorSet.top {
+            topConstraint = self.topAnchor.constraint(equalTo: top, constant: paddingValueSet?.top ?? 0 + topInset)
+            topConstraint?.activate()
+        }
+        if let right = anchorSet.right {
+            rightConstraint = rightAnchor.constraint(equalTo: right, constant: -(paddingValueSet?.right ?? 0))
+            rightConstraint?.activate()
+        }
+        if let bottom = anchorSet.bottom {
+            bottomConstraint = bottomAnchor.constraint(equalTo: bottom, constant: -(paddingValueSet?.bottom ?? 0) - bottomInset)
+            bottomConstraint?.activate()
+        }
+        if let left = anchorSet.left {
+            leftConstraint = self.leftAnchor.constraint(equalTo: left, constant: paddingValueSet?.left ?? 0)
+            leftConstraint?.activate()
+        }
+        return (topConstraint, rightConstraint, bottomConstraint, leftConstraint)
+    }
+    
+    @discardableResult func setConstraintView(_ view: UIView, paddingValueSet: PaddingValueSet? = nil, enableInsets: Bool = false) -> (NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?) {
+        return self.setConstraints(anchorSet: AnchorSet(top: view.topAnchor, right: view.rightAnchor, bottom: view.bottomAnchor, left: view.leftAnchor), paddingValueSet: paddingValueSet)
+    }
+    
+    @discardableResult func setSuperViewAsConstraint(paddingValueSet: PaddingValueSet? = nil) -> (NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?) {
+        if self.superview != nil {
+            return self.setConstraintView(self.superview!, paddingValueSet: paddingValueSet)
+        } else {
+            return (nil, nil, nil, nil)
+        }
+    }
+    
+    func setSizeConstraints(width: CGFloat?, height: CGFloat?) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        if height != nil {
+            heightAnchor.constraint(equalToConstant: height!).activate()
+        }
+        if width != nil {
+            widthAnchor.constraint(equalToConstant: width!).activate()
+        }
+    }
+    
+}
+
+extension NSLayoutConstraint {
+    
+    func activate() {
+        self.isActive = true
+    }
+    
+    func deactivate() {
+        self.isActive = false
+    }
+    
 }
 
 public extension UIViewController {
@@ -623,6 +693,10 @@ public extension UIViewController {
     
     func isPresentable(viewController: UIViewController) -> Bool {
         return self.presentedViewController == nil && self.presentingViewController == nil && !viewController.isBeingDismissed
+    }
+    
+    func isDismissable(viewController: UIViewController) -> Bool {
+        return self.presentedViewController == viewController
     }
     
 }
