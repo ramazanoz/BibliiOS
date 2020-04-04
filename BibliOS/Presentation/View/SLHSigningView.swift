@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SLHSigningView: UIView {
+open class SLHSigningView: UIView {
     private var lastPoint = CGPoint.zero
     private var brushWidth: CGFloat = 2.0
     private var opacity: CGFloat = 1.0
@@ -30,7 +30,7 @@ class SLHSigningView: UIView {
     }
     private var text: NSString!
     
-    init(frame: CGRect, text: NSString) {
+    public init(frame: CGRect, text: NSString) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.white
         self.text = text
@@ -44,11 +44,11 @@ class SLHSigningView: UIView {
         self.buildImage()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+   public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+   public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.swiped = false
         if let touch = touches.first {
             self.lastPoint = touch.location(in: self.imageView)
@@ -56,7 +56,7 @@ class SLHSigningView: UIView {
         self.addDot(to: self.lastPoint)
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+   public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.swiped = true
         if let touch = touches.first {
             let currentPoint = touch.location(in: self.imageView)
@@ -65,7 +65,7 @@ class SLHSigningView: UIView {
         }
     }
     
-    func addDot(to point: CGPoint) {
+   public func addDot(to point: CGPoint) {
         UIGraphicsBeginImageContext(self.imageView.frame.size)
         let context = UIGraphicsGetCurrentContext()
         self.imageView.image?.draw(in: self.imageView.bounds)

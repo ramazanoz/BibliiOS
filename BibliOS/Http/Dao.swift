@@ -53,13 +53,13 @@ open class Dao: NSObject {
     // override and run the http request here
     public func execute() { }
     
-    init(url: String, method: HTTPMethod, delegate: DaoDelegate?) {
+    public init(url: String, method: HTTPMethod, delegate: DaoDelegate?) {
         self.url = url
         self.method = method
         self.delegate = delegate
     }
     
-    init(url: String, method: HTTPMethod, successAction: DaoSuccessAction?, failAction: DaoFailAction?) {
+    public init(url: String, method: HTTPMethod, successAction: DaoSuccessAction?, failAction: DaoFailAction?) {
         self.url = url
         self.method = method
         self.successAction = successAction
