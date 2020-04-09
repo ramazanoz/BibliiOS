@@ -297,7 +297,7 @@ fileprivate class SLHSimpleRowView: UITableViewCell {
 			if row.cells[i] is SLHSimpleTextCell {
 				let label = UILabel(frame: CGRect(x: left, y: 0, width: partWidth * table.columns[i].widthRate, height: frame.height))
 				label.text = (row.cells[i] as! SLHSimpleTextCell).text
-				label.textColor = tableView.textColors.row
+				label.textColor = (row.cells[i] as! SLHSimpleTextCell).color ?? tableView.textColors.row
 				if tableView.fonts.row == nil {
 					label.setFontSize(tableView.fontSizes.row)
 				} else {
