@@ -357,19 +357,15 @@ public extension UIImageView {
             let superViewSizeRate = self.superview!.width / self.superview!.height
             let sizeRate = self.image!.size.width / self.image!.size.height
             if sizeRate > superViewSizeRate {
-                self.frame = CGRect(
-                    x: 0,
-                    y: (self.superview!.height - self.height) / 2,
-                    width: self.superview!.width,
-                    height: self.height * (self.superview!.width / self.width)
-                )
+                self.height = self.height * (self.superview!.width / self.width)
+                self.top = (self.superview!.height - self.height) / 2
+                self.left = 0
+                self.width = self.superview!.width
             } else {
-                self.frame = CGRect(
-                    x: (self.superview!.width - self.width) / 2,
-                    y: 0,
-                    width: self.width * (self.superview!.height / self.height),
-                    height: self.superview!.height
-                )
+                self.width = self.width * (self.superview!.height / self.height)
+                self.left = (self.superview!.width - self.width) / 2
+                self.top = 0
+                self.height = self.superview!.height
             }
         }
     }
