@@ -303,7 +303,7 @@ fileprivate class SLHSimpleRowView: UITableViewCell {
 				} else {
 					label.font = UIFont(name: tableView.fonts.row!, size: tableView.fontSizes.row)
 				}
-				label.textAlignment = table.columns[i].alignment ?? .left
+                label.textAlignment = (row.cells[i] as! SLHSimpleTextCell).alignment  ?? .left
 				self.addSubview(label)
 				left = label.right
 			} else if row.cells[i] is SLHSimpleViewCell {

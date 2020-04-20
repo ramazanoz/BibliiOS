@@ -48,7 +48,7 @@ open class SLHSigningView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-   public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.swiped = false
         if let touch = touches.first {
             self.lastPoint = touch.location(in: self.imageView)
@@ -56,7 +56,7 @@ open class SLHSigningView: UIView {
         self.addDot(to: self.lastPoint)
     }
     
-   public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.swiped = true
         if let touch = touches.first {
             let currentPoint = touch.location(in: self.imageView)
