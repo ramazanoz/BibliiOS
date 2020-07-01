@@ -241,7 +241,7 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
     
     // MARK: - UITableViewDataSource Methods
     
-    private func numberOfSections(in tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         return self.slhDelegate?.numberOfSectionsInTableView(self) ?? 1
     }
     
@@ -294,7 +294,7 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
     
     // UIScrollViewDelegate methods
     
-    private func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.slhDelegate?.didScroll(self)
     }
 }

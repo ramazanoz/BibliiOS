@@ -141,6 +141,9 @@ public class SLHTabView: UIView {
             let innerContent = self.delegate.viewForTabContent(view: self, index: index, bounds: self.tabContents[index].bounds)
             if innerContent != nil {
                 self.tabContents[index].addSubview(innerContent!)
+                if (innerContent!.frame == CGRect.null) {
+                    innerContent?.setSuperViewAsConstraint()
+                }
             }
         }
     }
