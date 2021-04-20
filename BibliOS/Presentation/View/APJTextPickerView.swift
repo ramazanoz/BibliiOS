@@ -87,7 +87,7 @@ open class APJTextPickerView: UITextField {
     }
     
     // MARK: init methods
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         _initialize()
     }
@@ -170,6 +170,24 @@ open class APJTextPickerView: UITextField {
         picker.delegate = self
         picker.dataSource = self
         inputView = picker
+    }
+    
+    private func _selectString() {
+        if let row = dataPicker?.selectedRow(inComponent: 0) {
+            text = pickerDelegate?.textPickerView(self, titleForRow: row)
+            pickerDelegate?.textPickerView(self, didSelectString: row)
+        }
+    }
+    
+    public func selectRow(_ row: Int) {
+        if self.dataSource?.numberOfRows(in: self) ?? 0 > 0 {
+            dataPicker?.selectRow(row, inComponent: 0, animated: false)
+            self._selectString()
+        }
+    }
+    
+    public func getSelectedRow() -> Int? {
+    return dataPicker?.selectedRow(inComponent: 0)
     }
     
     private func _updateDataText() {

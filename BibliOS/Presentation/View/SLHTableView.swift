@@ -40,7 +40,7 @@ public extension SLHTableViewDelegate {
 }
 
 public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSource, TableViewCellDelegate, UIScrollViewDelegate {
-    var myRefreshControl: UIRefreshControl?
+    public var myRefreshControl: UIRefreshControl?
     var beforeRefreshText: String = ""
     var onRefreshText: String = ""
     var animColor: UIColor
@@ -52,16 +52,16 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
     fileprivate var messageLabel: UILabel?
     var messageText = "There is no item to display"
     
-    var headerHeight: CGFloat?
-    var rowHeight2: CGFloat?
-    var footerHeight: CGFloat?
+    public var headerHeight: CGFloat?
+    public var rowHeight2: CGFloat?
+    public var footerHeight: CGFloat?
     
-    public init(frame: CGRect, hasPullRefresh: Bool = false, animColor: UIColor = UIColor.darkGray) {
+    public init(frame: CGRect = CGRect.null, hasPullRefresh: Bool = false, animColor: UIColor = UIColor.darkGray) {
         self.animColor = animColor
         super.init(frame: frame, style: UITableView.Style.plain)
         self.delegate = self
         self.dataSource = self
-        //        self.editing = false
+//                self.editing = false
         self.separatorStyle = .none
         self.backgroundColor = UIColor.clear
         self.setCellIdentifierPrefix("Cell")
@@ -102,7 +102,7 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
         return self.selectable
     }
     
-    func setSelectionMode(_ value: Bool) {
+   public func setSelectionMode(_ value: Bool) {
         self.selectionMode = value
         self.reloadData(true)
     }
@@ -133,7 +133,7 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    func activateSelectionMode() {
+   public func activateSelectionMode() {
         if !self.selectionMode {
             self.selectionMode = true
             for cell in self.visibleCells {
@@ -191,19 +191,19 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
     
     // MARK: - UITableViewDelegate Methods
     
-    private func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return self.headerHeight ?? self.slhDelegate?.heightForHeaderInSection(self, section: section) ?? 0
     }
     
-    private func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return self.rowHeight2 ?? self.slhDelegate?.heightForRowAtIndexPath(self, indexPath: indexPath) ?? 50
     }
     
-    private func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return self.footerHeight ?? self.slhDelegate?.heightForFooterInSection(self, section: section) ?? 0
     }
     
-    private func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         if cell is SLHTableViewCell && self.selectable && self.selectionMode {
             (cell as! SLHTableViewCell).setSelected()
@@ -211,7 +211,7 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
         self.slhDelegate?.didSelectRowAtIndexPath(self, indexPath: indexPath)
     }
     
-    private func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+   public func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         if cell is SLHTableViewCell {
             (cell as! SLHTableViewCell).setUnselected()
@@ -219,29 +219,29 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
         self.slhDelegate?.didDeselectRowAtIndexPath(self, indexPath: indexPath)
     }
     
-    private func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return self.slhDelegate?.canEditForRow(self, indexPath: indexPath) ?? false
     }
     
-    private func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+    public  func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
         self.slhDelegate?.willBeginEditingRowAtIndexPath(self, indexPath: indexPath)
     }
     
-    private func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+    public func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
         self.slhDelegate?.didEndEditingRowAtIndexPath(self, indexPath: indexPath)
     }
     
-    private func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    public func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         return self.slhDelegate?.editActionsForRow(self, indexPath: indexPath) ?? nil
     }
     
-    private func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         debugPrint("commit")
     }
     
     // MARK: - UITableViewDataSource Methods
     
-    private func numberOfSections(in tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         return self.slhDelegate?.numberOfSectionsInTableView(self) ?? 1
     }
     
@@ -249,7 +249,7 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
         return self.slhDelegate?.numberOfRowsInSection(self, section: section) ?? 0
     }
     
-    private func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return self.slhDelegate?.viewForHeaderInSection(self, section: section) ?? nil
     }
     
@@ -269,7 +269,7 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
         return cell!
     }
     
-    private func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return self.slhDelegate?.viewForFooterInSection(self, section: section) ?? nil
     }
     
@@ -294,7 +294,7 @@ public class SLHTableView: UITableView, UITableViewDelegate, UITableViewDataSour
     
     // UIScrollViewDelegate methods
     
-    private func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.slhDelegate?.didScroll(self)
     }
 }

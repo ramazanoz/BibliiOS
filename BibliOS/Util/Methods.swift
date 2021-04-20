@@ -78,6 +78,28 @@ public struct MetaUtil {
     public static func getDoubleArray(of object: MetaObject, with key: String) -> [Double] {
         return getValue(of: object, with: key) as? [Double] ?? []
     }
+    
+    public static func decode<T>(from object: MetaObject, to type: T.Type, dateFormat: String? = nil) -> Any where T : Decodable {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: object, options: .prettyPrinted)
+
+            let reqJSONStr = String(data: jsonData, encoding: .utf8)
+            let utf8data = reqJSONStr?.data(using: .utf8)
+            let jsonDecoder = JSONDecoder()
+    
+            if dateFormat != nil {
+                let formatter = DateFormatter()
+                formatter.dateFormat = dateFormat!
+                jsonDecoder.dateDecodingStrategy = .formatted(formatter)
+            }
+            
+            let result = try jsonDecoder.decode(type.self, from: utf8data!)
+            return result
+        } catch let jsonErr {
+            print("Error serializing json:", jsonErr)
+            return jsonErr
+        }
+    }
 }
 
 // MARK: - DispatchQueue
@@ -114,13 +136,14 @@ public struct DateUtil {
         return self.getSharedDateFormatter(format: format).date(from: date)
     }
     
+    
 }
 
 // MARK: - Other
 
 public struct DeviceUtil {
     
-    public var isConnectedToNetwork: Bool {
+    public static func isConnectedToNetwork() -> Bool {
         var zeroAddress = sockaddr_in(sin_len: 0, sin_family: 0, sin_port: 0, sin_addr: in_addr(s_addr: 0), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
         zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
         zeroAddress.sin_family = sa_family_t(AF_INET)
@@ -185,5 +208,5 @@ public struct Util {
     public static func isNotEmpty(_ value: Any?) -> Bool {
         return !Util.isEmpty(value)
     }
-
+    
 }

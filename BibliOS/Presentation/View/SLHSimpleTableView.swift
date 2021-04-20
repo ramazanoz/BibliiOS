@@ -8,26 +8,26 @@
 
 import UIKit
 
-struct SLHSimpleColumn {
+public struct SLHSimpleColumn {
 	let title: String
 	let widthRate: CGFloat
 	let alignment: NSTextAlignment?
 	
-	init(title: String, widthRate: CGFloat, alignment: NSTextAlignment? = nil) {
+	public init(title: String, widthRate: CGFloat, alignment: NSTextAlignment? = nil) {
 		self.title = title
 		self.widthRate = widthRate
 		self.alignment = alignment
 	}
 }
 
-class SLHSimpleCell { }
+public class SLHSimpleCell { }
 
-class SLHSimpleTextCell: SLHSimpleCell {
+public class SLHSimpleTextCell: SLHSimpleCell {
 	let text: String
 	let color: UIColor?
 	let alignment: NSTextAlignment?
 	
-	init(text: String, color: UIColor? = nil, alignment: NSTextAlignment? = nil) {
+	public init(text: String, color: UIColor? = nil, alignment: NSTextAlignment? = nil) {
 		self.text = text
 		self.color = color
 		self.alignment = alignment
@@ -43,17 +43,17 @@ class SLHSimpleViewCell: SLHSimpleCell {
 	}
 }
 
-struct SLHSimpleRow {
+public struct SLHSimpleRow {
 	let cells: [SLHSimpleCell]
 	let item: Any?
 	
-	init(cells: [SLHSimpleCell], item: Any? = nil) {
+	public init(cells: [SLHSimpleCell], item: Any? = nil) {
 		self.cells = cells
 		self.item = item
 	}
 }
 
-struct SLHSimpleFooter {
+public struct SLHSimpleFooter {
 	let cells: [SLHSimpleCell]
 	let widthRates: [CGFloat]
 	
@@ -63,7 +63,7 @@ struct SLHSimpleFooter {
 	}
 }
 
-struct SLHSimpleTable {
+public struct SLHSimpleTable {
 	let columns: [SLHSimpleColumn]
 	let rows: [SLHSimpleRow]
 	let footer: SLHSimpleFooter?
@@ -71,7 +71,7 @@ struct SLHSimpleTable {
 	let hideHeaderWhenHasNoItem: Bool
 	let hideFooterWhenHasNoItem: Bool
 	
-	init(columns: [SLHSimpleColumn], rows: [SLHSimpleRow], footer: SLHSimpleFooter? = nil, noItemInfo: String? = nil, hideHeaderWhenHasNoItem: Bool = true, hideFooterWhenHasNoItem: Bool = true) {
+	public init(columns: [SLHSimpleColumn], rows: [SLHSimpleRow], footer: SLHSimpleFooter? = nil, noItemInfo: String? = nil, hideHeaderWhenHasNoItem: Bool = true, hideFooterWhenHasNoItem: Bool = true) {
 		self.columns = columns
 		self.rows = rows
 		self.footer = footer
@@ -81,7 +81,7 @@ struct SLHSimpleTable {
 	}
 }
 
-class SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
+open class  SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
 	
 	public typealias SLHSimpleSelectAction = (_ item: Any?) -> Void
 	
@@ -91,7 +91,7 @@ class SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewDelegat
 	private var reloadCounter: Int = 0
 	
 	private var _tables: [SLHSimpleTable] = []
-	var tables: [SLHSimpleTable] {
+	public var tables: [SLHSimpleTable] {
 		get {
 			return self._tables
 		}
@@ -101,10 +101,10 @@ class SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewDelegat
 			self.reloadData()
 		}
 	}
-	fileprivate var selectAction: SLHSimpleSelectAction?
-	fileprivate var deselectAction: SLHSimpleDeselectAction?
+	public var selectAction: SLHSimpleSelectAction?
+	public var deselectAction: SLHSimpleDeselectAction?
 	
-	fileprivate var selectedIndexPaths = [IndexPath]()
+	public var selectedIndexPaths = [IndexPath]()
 	var selectedItems: [Any] {
 		var items = [Any]()
 		for indexPath in self.selectedIndexPaths {
@@ -118,14 +118,14 @@ class SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewDelegat
 	
 	var horizontalPadding: CGFloat = 16
 	
-	var heights: ( header: CGFloat, row: CGFloat, footer: CGFloat ) = ( header: 50, row: 50, footer: 50 )
-	var backgroundColors: ( header: UIColor, row: UIColor, footer: UIColor ) = ( header: UIColor.darkGray, row: UIColor.white, footer: UIColor.lightGray )
-	var textColors: ( header: UIColor, row: UIColor, footer: UIColor ) = ( header: UIColor.white, row: UIColor.darkGray, footer: UIColor.darkGray )
-	var fonts: ( header: String?, row: String?, footer: String? )
-	var fontSizes: ( header: CGFloat, row: CGFloat, footer: CGFloat ) = ( header: 16, row: 16, footer: 16 )
-	var hasSeparators: Bool = false
+	public var heights: ( header: CGFloat, row: CGFloat, footer: CGFloat ) = ( header: 50, row: 50, footer: 50 )
+	public var backgroundColors: ( header: UIColor, row: UIColor, footer: UIColor ) = ( header: UIColor.darkGray, row: UIColor.white, footer: UIColor.lightGray )
+	public var textColors: ( header: UIColor, row: UIColor, footer: UIColor ) = ( header: UIColor.white, row: UIColor.darkGray, footer: UIColor.darkGray )
+	public var fonts: ( header: String?, row: String?, footer: String? )
+	public var fontSizes: ( header: CGFloat, row: CGFloat, footer: CGFloat ) = ( header: 16, row: 16, footer: 16 )
+	public var hasSeparators: Bool = false
 	
-	init(frame: CGRect, identifier: String, didSelect: SLHSimpleSelectAction? = nil, didDeselect: SLHSimpleDeselectAction? = nil) {
+    public init(frame: CGRect = CGRect.null, identifier: String, didSelect: SLHSimpleSelectAction? = nil, didDeselect: SLHSimpleDeselectAction? = nil) {
 		self.identifier = identifier
         super.init(frame: frame, style: UITableView.Style.plain)
 		self.selectAction = didSelect
@@ -135,33 +135,33 @@ class SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewDelegat
 		super.separatorStyle = .none
 	}
 	
-	required init?(coder aDecoder: NSCoder) {
+	public required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
 	// MARK: UITableViewDatasource Methods
 	
-	func numberOfSections(in tableView: UITableView) -> Int {
+	public func numberOfSections(in tableView: UITableView) -> Int {
 		return self.tables.count
 	}
 	
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.tables[section].rows.count == 0 && self.tables[section].noItemInfo != nil ? 1 : self.tables[section].rows.count
 	}
 	
-	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+	public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 		return self.tables[section].hideHeaderWhenHasNoItem && self.tables[section].rows.count == 0 ? 0 : self.heights.header
 	}
 	
-	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+	public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		return self.tables[indexPath.section].rows.count == 0 && self.tables[indexPath.section].noItemInfo == nil ? 0 : self.heights.row
 	}
 	
-	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+	public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		return self.tables[section].footer == nil || (self.tables[section].hideFooterWhenHasNoItem && self.tables[section].rows.count == 0) ? 0 : self.heights.footer
 	}
 	
-	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+	public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		if self.tables[section].hideHeaderWhenHasNoItem && self.tables[section].rows.count == 0 {
 			return nil
 		} else {
@@ -175,7 +175,7 @@ class SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewDelegat
 		}
 	}
 	
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		if self.tables[indexPath.section].rows.count == 0 && self.tables[indexPath.section].noItemInfo != nil && indexPath.row == 0 {
 			let reuseIdentifier = "noitemrow_\(self.identifier)_\(self.reloadCounter)_\(indexPath.section)_\(indexPath.row)"
 			let cell = super.dequeueReusableCell(withIdentifier: reuseIdentifier)
@@ -197,7 +197,7 @@ class SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewDelegat
 		}
 	}
 	
-	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+	public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
 		if self.tables[section].footer == nil || (self.tables[section].hideFooterWhenHasNoItem && self.tables[section].rows.count == 0) {
 			return nil
 		} else {
@@ -213,14 +213,14 @@ class SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewDelegat
 	
 	// MARK: UITableViewDelegate Methods
 	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+	public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		if self.tables[indexPath.section].rows.count > 0 {
 			self.selectedIndexPaths.append(indexPath)
 			self.selectAction?(self.tables[indexPath.section].rows[indexPath.row].item)
 		}
 	}
 	
-	func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+	public func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
 		if self.tables[indexPath.section].rows.count > 0 {
 			for i in 0..<self.selectedIndexPaths.count {
 				if self.selectedIndexPaths[i] == indexPath {
@@ -260,6 +260,10 @@ fileprivate class SLHSimpleHeaderView: UIView {
 			self.addSubview(label)
 			left = label.right
 		}
+        
+        let separator = UIView(frame: CGRect(x: 0, y: frame.height - 0.5, width: frame.width, height: 0.5))
+            separator.backgroundColor = UIColor.darkGray
+            self.addSubview(separator)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -282,18 +286,24 @@ fileprivate class SLHSimpleRowView: UITableViewCell {
 		}
 		var left = tableView.horizontalPadding
 		let partWidth: CGFloat = (frame.width - 2 * left) / totalWidthRate
+        
+        if tableView.hasSeparators {
+                let separator = UIView(frame: CGRect(x: 0, y: frame.height - 0.5, width: frame.width, height: 0.5))
+                separator.backgroundColor = tableView.separatorColor
+                self.addSubview(separator)
+            }
 		
 		for i in 0..<row.cells.count {
 			if row.cells[i] is SLHSimpleTextCell {
 				let label = UILabel(frame: CGRect(x: left, y: 0, width: partWidth * table.columns[i].widthRate, height: frame.height))
 				label.text = (row.cells[i] as! SLHSimpleTextCell).text
-				label.textColor = tableView.textColors.row
+				label.textColor = (row.cells[i] as! SLHSimpleTextCell).color ?? tableView.textColors.row
 				if tableView.fonts.row == nil {
 					label.setFontSize(tableView.fontSizes.row)
 				} else {
 					label.font = UIFont(name: tableView.fonts.row!, size: tableView.fontSizes.row)
 				}
-				label.textAlignment = table.columns[i].alignment ?? .left
+                label.textAlignment = (row.cells[i] as! SLHSimpleTextCell).alignment  ?? .left
 				self.addSubview(label)
 				left = label.right
 			} else if row.cells[i] is SLHSimpleViewCell {
