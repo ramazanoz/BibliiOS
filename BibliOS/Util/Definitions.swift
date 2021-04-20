@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 //public typealias KVP = (key: String, value: Any)
 public typealias MetaObject = [String: Any]
@@ -14,6 +15,10 @@ public typealias MetaObject = [String: Any]
 public typealias MetaArray = [MetaObject]
 
 public typealias SomeAction = () -> Void
+
+public typealias SuccessActionWithData = (_ data: Data) -> Void
+
+public typealias FailAction = () -> Void
 
 public class Currency {
     private var _name: String
@@ -65,7 +70,7 @@ public struct AnchorSet {
         self.bottom = bottom
         self.left = left
     }
-    
+	
     public init(_ top: NSLayoutYAxisAnchor?, _ right: NSLayoutXAxisAnchor?, _ bottom: NSLayoutYAxisAnchor?, _ left: NSLayoutXAxisAnchor?) {
         self.init(top: top, right: right, bottom: bottom, left: left)
     }
