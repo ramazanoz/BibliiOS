@@ -38,6 +38,19 @@ public struct MetaUtil {
         return result
     }
     
+    public static func getInt64(of object: MetaObject, with key: String, defaultValue: Int64? = 0) -> Int64? {
+        var result: Int64? = defaultValue
+        let value = getValue(of: object, with: key)
+        if value != nil {
+            if value is Int64 {
+                result = value as? Int64
+            } else if value is String && Int64(value as! String) != nil {
+                result = Int64(value as! String)!
+            }
+        }
+        return result
+    }
+    
     public static func getDouble(of object: MetaObject, with key: String, defaultValue: Double? = 0) -> Double? {
         return getValue(of: object, with: key) as? Double ?? defaultValue
     }
@@ -151,7 +164,9 @@ public struct Util {
             return value as! Double == 0
         } else if value is Float {
             return value as! Float == 0
-        } else if value is Int8 {
+		} else if value is Array<Any> {
+			return (value as! Array<Any>).isEmpty
+		} else if value is Int8 {
             return value as! Int8 == 0
         } else if value is Int16 {
             return value as! Int16 == 0

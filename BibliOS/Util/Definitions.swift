@@ -58,6 +58,17 @@ public struct AnchorSet {
     let right: NSLayoutXAxisAnchor?
     let bottom: NSLayoutYAxisAnchor?
     let left: NSLayoutXAxisAnchor?
+    
+    public init(top: NSLayoutYAxisAnchor? = nil, right: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, left: NSLayoutXAxisAnchor? = nil) {
+        self.top = top
+        self.right = right
+        self.bottom = bottom
+        self.left = left
+    }
+    
+    public init(_ top: NSLayoutYAxisAnchor?, _ right: NSLayoutXAxisAnchor?, _ bottom: NSLayoutYAxisAnchor?, _ left: NSLayoutXAxisAnchor?) {
+        self.init(top: top, right: right, bottom: bottom, left: left)
+    }
 }
 
 public struct PaddingValueSet {
@@ -71,5 +82,9 @@ public struct PaddingValueSet {
         self.right = right
         self.bottom = bottom
         self.left = left
+    }
+    
+    public init(_ value: CGFloat) {
+        self.init(top: value, right: value, bottom: value, left: value)
     }
 }

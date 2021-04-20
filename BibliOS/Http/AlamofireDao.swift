@@ -19,7 +19,7 @@ open class AlamofireDao: Dao {
         }
     }
     
-    public override func execute() {
+    open override func execute() {
         self.request = SessionManager.default.daoRequest(super.finalUrl, method: Alamofire.HTTPMethod(rawValue: super.method.rawValue) ?? .get, parameters: super.bodyData, encoding: self.encoding, headers: super.headers, disableCache: true)
         self.request!.responseJSON() { response in
             let data: Any? = response.result.value as? MetaObject ?? response.result.value as? MetaArray ?? nil
