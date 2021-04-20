@@ -154,6 +154,9 @@ public extension Double {
         return String(format: "%.\(decimalCount)f", self).doubleValue
     }
     
+	func stringValue(trimDecimalIfInt: Bool = false) -> String {
+		return self.isInteger ? String(self.intValue) : String(self)
+	}
 }
 
 public extension Float {
@@ -317,6 +320,19 @@ public extension UIImage {
         UIGraphicsEndImageContext()
         return resizedImage!
     }
+	
+	func withInset(_ insets: UIEdgeInsets) -> UIImage? {
+		let cgSize = CGSize(width: self.size.width + insets.left * self.scale + insets.right * self.scale,
+							height: self.size.height + insets.top * self.scale + insets.bottom * self.scale)
+		
+		UIGraphicsBeginImageContextWithOptions(cgSize, false, self.scale)
+		defer { UIGraphicsEndImageContext() }
+		
+		let origin = CGPoint(x: insets.left * self.scale, y: insets.top * self.scale)
+		self.draw(at: origin)
+		
+		return UIGraphicsGetImageFromCurrentImageContext()?.withRenderingMode(self.renderingMode)
+	}
     
 }
 
@@ -439,11 +455,11 @@ public extension UILabel {
         self.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: self.width, height: self.height)
     }
     
-    func setRequiredWidth() {
+	func setRequiredWidth(insetSize: CGFloat = 0) {
         let frame = self.frame
         self.width = CGFloat.greatestFiniteMagnitude
         self.sizeToFit()
-        self.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: self.width, height: frame.size.height)
+		self.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: self.width + insetSize, height: frame.size.height)
     }
     
 }
@@ -456,6 +472,18 @@ public extension UINavigationController {
                 self.navigationController!.popToViewController(viewControllers![i - 1], animated: animated)
             }
         }
+    }
+    
+    func setStatusBarColor(_ color: UIColor) {
+        let statusBarFrame: CGRect
+        if #available(iOS 13.0, *) {
+            statusBarFrame = view.window?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero
+        } else {
+            statusBarFrame = UIApplication.shared.statusBarFrame
+        }
+        let statusBarView = UIView(frame: statusBarFrame)
+        statusBarView.backgroundColor = color
+        view.addSubview(statusBarView)
     }
 }
 
@@ -625,6 +653,10 @@ public extension UIView {
         return (topConstraint, rightConstraint, bottomConstraint, leftConstraint)
     }
     
+    @discardableResult func setConstraints(_ anchorSet: AnchorSet, _ paddingValueSet: PaddingValueSet? = nil, enableInsets: Bool = false) -> (NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?) {
+        return self.setConstraints(anchorSet: anchorSet, paddingValueSet: paddingValueSet, enableInsets: enableInsets)
+    }
+    
     @discardableResult func setConstraintView(_ view: UIView, paddingValueSet: PaddingValueSet? = nil, enableInsets: Bool = false) -> (NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?) {
         return self.setConstraints(anchorSet: AnchorSet(top: view.topAnchor, right: view.rightAnchor, bottom: view.bottomAnchor, left: view.leftAnchor), paddingValueSet: paddingValueSet)
     }
@@ -666,19 +698,19 @@ public extension UIViewController {
     func dismissPresentedViewController(animated: Bool = false, forceToDismiss: Bool = true, completion: (() -> Void)? = nil) {
         debugPrint("UIViewController.dismissPresentedViewController")
         if self.presentedViewController == nil {
-            debugPrint("no presentedViewController")
+//            debugPrint("no presentedViewController")
             completion?()
         } else {
             if self.presentedViewController!.presentedViewController == nil {
-                debugPrint("presentedViewController dismissed")
+//                debugPrint("presentedViewController dismissed")
                 self.presentedViewController!.dismiss(animated: animated, completion: completion)
             } else if (forceToDismiss) {
-                debugPrint("will try to dismiss grand presentedViewController")
+//                debugPrint("will try to dismiss grand presentedViewController")
                 self.presentedViewController!.dismissPresentedViewController(animated: false, completion: {
                     self.presentedViewController!.dismiss(animated: animated, completion: completion)
                 })
             } else {
-                debugPrint("won't dismiss any presentedViewController")
+//                debugPrint("won't dismiss any presentedViewController")
             }
         }
     }
