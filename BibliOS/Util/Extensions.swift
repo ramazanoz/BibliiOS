@@ -145,14 +145,14 @@ public extension Double {
     var intValue: Int { return Int(self) }
     
     var isInteger: Bool { return floor(self) == self }
-    
-    func formattedStringValue(_ decimalCount: Int) -> String {
-        return String(format: "%.\(decimalCount)f", self)
-    }
-    
-    func formattedValue(_ decimalCount: Int) -> Double {
-        return String(format: "%.\(decimalCount)f", self).doubleValue
-    }
+	
+	func formattedStringValue(_ decimalCount: Int) -> String {
+		return String(format: "%.\(decimalCount)f", self.formattedValue(decimalCount))
+	}
+	
+	func formattedValue(_ decimalCount: Int) -> Double {
+		return (self * pow(10.0, Double(decimalCount))).rounded() / pow(10.0, Double(decimalCount))
+	}
     
 	func stringValue(trimDecimalIfInt: Bool = false) -> String {
 		return self.isInteger ? String(self.intValue) : String(self)
