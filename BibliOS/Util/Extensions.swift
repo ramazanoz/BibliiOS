@@ -348,7 +348,27 @@ public extension UIImage {
 		
 		return UIGraphicsGetImageFromCurrentImageContext()?.withRenderingMode(self.renderingMode)
 	}
-    
+	
+	func rotate(radians: CGFloat) -> UIImage {
+		let rotatedSize = CGRect(origin: .zero, size: size)
+			.applying(CGAffineTransform(rotationAngle: CGFloat(radians)))
+			.integral.size
+		UIGraphicsBeginImageContext(rotatedSize)
+		if let context = UIGraphicsGetCurrentContext() {
+			let origin = CGPoint(x: rotatedSize.width / 2.0,
+								 y: rotatedSize.height / 2.0)
+			context.translateBy(x: origin.x, y: origin.y)
+			context.rotate(by: radians)
+			draw(in: CGRect(x: -origin.y, y: -origin.x,
+							width: size.width, height: size.height))
+			let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+			UIGraphicsEndImageContext()
+			
+			return rotatedImage ?? self
+		}
+		return self
+	}
+	
 }
 
 public extension UIImageView {
@@ -624,9 +644,24 @@ public extension UIView {
         let rectShape = CAShapeLayer()
         rectShape.bounds = self.frame
         rectShape.position = self.center
-        rectShape.path = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: value, height: value)).cgPath
+        rectShape.path = UIBezierPath(
+			roundedRect: self.bounds,
+			byRoundingCorners: corners,
+			cornerRadii: CGSize(width: value, height: value)
+		).cgPath
         self.layer.mask = rectShape
     }
+	
+	func setMaskToView(corners: UIRectCorner) {
+		let rounded = UIBezierPath(
+			roundedRect: self.bounds,
+			byRoundingCorners: corners,
+			cornerRadii: CGSize(width: 10, height: 10)
+		)
+		let mask = CAShapeLayer()
+		mask.path = rounded.cgPath
+		self.layer.mask = mask
+	}
     
     @discardableResult func setConstraints(anchorSet: AnchorSet, paddingValueSet: PaddingValueSet? = nil, enableInsets: Bool = false) -> (NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?) {
         var topConstraint: NSLayoutConstraint?
@@ -689,7 +724,15 @@ public extension UIView {
             widthAnchor.constraint(equalToConstant: width!).activate()
         }
     }
-    
+	
+	func setCenterizeConstraits(x xAxisAnchor: NSLayoutXAxisAnchor? = nil, y yAxisAnchor: NSLayoutYAxisAnchor? = nil) {
+		if let x = xAxisAnchor {
+			self.centerXAnchor.constraint(equalTo: x).isActive = true
+		}
+		if let y = yAxisAnchor {
+			self.centerYAnchor.constraint(equalTo: y).isActive = true
+		}
+	}
 }
 
 extension NSLayoutConstraint {
