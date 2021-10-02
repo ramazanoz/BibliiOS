@@ -75,6 +75,11 @@ open class APJTextPickerView: UITextField {
             _updateToolbar()
         }
     }
+	public var clearText = "Clear" {
+		didSet {
+			_updateToolbar()
+		}
+	}
     public var doneText = "Done" {
         didSet {
             _updateToolbar()
@@ -87,10 +92,11 @@ open class APJTextPickerView: UITextField {
     }
     
     // MARK: init methods
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        _initialize()
-    }
+	public init(frame: CGRect, type: APJTextPickerViewType) {
+		self.type = type
+		super.init(frame: frame)
+		_initialize()
+	}
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -123,6 +129,9 @@ open class APJTextPickerView: UITextField {
         inputView = nil
         let picker = UIDatePicker()
         picker.datePickerMode = .date
+		if #available(iOS 13.4, *) {
+			picker.preferredDatePickerStyle = .wheels
+		}
         picker.addTarget(self, action: #selector(_changeDate), for: .valueChanged)
         inputView = picker
     }
@@ -141,12 +150,12 @@ open class APJTextPickerView: UITextField {
     }
     
     private func _updateCurrentDate() {
-        if _oldDateValue != currentDate || (text?.isEmpty ?? false) {
+		if currentDate == nil {
+			_oldDateValue = nil
+			text = nil
+		} else if _oldDateValue != currentDate || (text?.isEmpty ?? false) {
             pickerDelegate?.textPickerView(self, didSelectDate: currentDate)
             _updateDateText()
-        } else if currentDate == nil {
-            _oldDateValue = nil
-            text = nil
         }
         datePicker?.setDate(currentDate ?? Date(), animated: true)
         _oldDateValue = currentDate
@@ -211,7 +220,7 @@ open class APJTextPickerView: UITextField {
     
     // toolbar setup
     private func _updateToolbar() {
-        
+		let clearButton = UIBarButtonItem(title: clearText, style: .plain, target: self, action: #selector(_clear))
         let cancelButton = UIBarButtonItem(title: cancelText, style: .plain, target: self, action: #selector(_cancel)),
         space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
         doneButton = UIBarButtonItem(title: doneText, style: .done, target: self, action: #selector(_done)),
@@ -221,7 +230,7 @@ open class APJTextPickerView: UITextField {
         toolbar = UIToolbar()
         toolbar?.barStyle = .default
         toolbar?.isTranslucent = true
-        toolbar?.setItems([cancelButton, space, titleBarButton, space, doneButton], animated: false)
+        toolbar?.setItems([cancelButton, clearButton, space, titleBarButton, space, doneButton], animated: false)
         toolbar?.isUserInteractionEnabled = true
         toolbar?.sizeToFit()
         
@@ -231,13 +240,29 @@ open class APJTextPickerView: UITextField {
     // MARK: action methods
     
     @objc private func _cancel() {
-        switch type {
-        case .strings:
-            currentIndexSelected = _oldIndexSelected
-        case .date:
-            currentDate = _oldDateValue
-        }
-        endEditing(true)
+    	switch type {
+    	case .strings:
+    		currentIndexSelected = _oldIndexSelected
+			break
+    	case .date:
+    		if currentDate != nil && _oldDateValue != nil {
+    			currentDate = _oldDateValue
+    		}
+    		break
+    	}
+    	endEditing(true)
+    }
+
+    @objc private func _clear() {
+    	switch type {
+    	case .strings:
+			currentIndexSelected = nil
+			break
+    	case .date:
+			currentDate = nil
+			break
+    	}
+    	endEditing(true)
     }
     
     @objc private func _done() {

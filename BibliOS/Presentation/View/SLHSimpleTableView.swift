@@ -56,12 +56,16 @@ public struct SLHSimpleRow {
 public struct SLHSimpleFooter {
 	let cells: [SLHSimpleCell]
 	let widthRates: [CGFloat]
+	let bottomPadding: CGFloat
 	
-	init(cells: [SLHSimpleCell], widthRates: [CGFloat]) {
+	public init(cells: [SLHSimpleCell], widthRates: [CGFloat], bottomPadding: CGFloat = 0) {
 		self.cells = cells
 		self.widthRates = widthRates
+		self.bottomPadding = bottomPadding
 	}
 }
+
+public typealias SLHTableTitle = (text: String, font: String?, fontSize: CGFloat?, backgroundColor: UIColor?, fontColor: UIColor?)
 
 public struct SLHSimpleTable {
 	let columns: [SLHSimpleColumn]
@@ -70,14 +74,23 @@ public struct SLHSimpleTable {
 	let noItemInfo: String?
 	let hideHeaderWhenHasNoItem: Bool
 	let hideFooterWhenHasNoItem: Bool
+	let title: SLHTableTitle?
 	
-	public init(columns: [SLHSimpleColumn], rows: [SLHSimpleRow], footer: SLHSimpleFooter? = nil, noItemInfo: String? = nil, hideHeaderWhenHasNoItem: Bool = true, hideFooterWhenHasNoItem: Bool = true) {
+	public init(
+		columns: [SLHSimpleColumn],
+		rows: [SLHSimpleRow],
+		footer: SLHSimpleFooter? = nil,
+		noItemInfo: String? = nil,
+		hideHeaderWhenHasNoItem: Bool = true,
+		hideFooterWhenHasNoItem: Bool = true,
+		title: SLHTableTitle? = nil) {
 		self.columns = columns
 		self.rows = rows
 		self.footer = footer
 		self.noItemInfo = noItemInfo
 		self.hideHeaderWhenHasNoItem = hideHeaderWhenHasNoItem
 		self.hideFooterWhenHasNoItem = hideFooterWhenHasNoItem
+		self.title = title
 	}
 }
 
@@ -150,7 +163,8 @@ open class  SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewD
 	}
 	
 	public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		return self.tables[section].hideHeaderWhenHasNoItem && self.tables[section].rows.count == 0 ? 0 : self.heights.header
+		let table = self.tables[section]
+		return (table.title == nil ? 0 : self.heights.header) + (table.hideHeaderWhenHasNoItem && table.rows.count == 0 ? 0 : self.heights.header)
 	}
 	
 	public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -158,7 +172,7 @@ open class  SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewD
 	}
 	
 	public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-		return self.tables[section].footer == nil || (self.tables[section].hideFooterWhenHasNoItem && self.tables[section].rows.count == 0) ? 0 : self.heights.footer
+		return self.tables[section].footer == nil || (self.tables[section].hideFooterWhenHasNoItem && self.tables[section].rows.count == 0) ? 0 : (self.heights.footer + (self.tables[section].footer?.bottomPadding ?? 0))
 	}
 	
 	public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -168,7 +182,11 @@ open class  SLHSimpleTableView: UITableView, UITableViewDataSource, UITableViewD
 			let reuseIdentifier = "header_\(self.identifier)_\(self.reloadCounter)_\(section)"
 			let header = super.dequeueReusableHeaderFooterView(withIdentifier: reuseIdentifier)
 			return header ?? SLHSimpleHeaderView(
-				frame: CGRect(x: 0, y: 0, width: tableView.width, height: self.heights.header),
+				frame: CGRect(
+					x: 0,
+					y: 0,
+					width: tableView.width,
+					height: self.tableView(tableView, heightForHeaderInSection: section)),
 				tableView: self,
 				table: self.tables[section]
 			)
@@ -238,8 +256,29 @@ fileprivate class SLHSimpleHeaderView: UIView {
 	
 	init(frame: CGRect, tableView: SLHSimpleTableView, table: SLHSimpleTable) {
 		super.init(frame: frame)
+		let partHeight = table.title == nil ? frame.size.height : (frame.size.height / 2)
+		
+		if let title = table.title {
+			let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: partHeight))
+			titleLabel.text = title.text
+			titleLabel.textAlignment = .center
+			if let font = title.font {
+				titleLabel.font = UIFont(name: font, size: title.fontSize ?? tableView.fontSizes.header)
+			} else {
+				titleLabel.font = UIFont.systemFont(ofSize: title.fontSize ?? tableView.fontSizes.header)
+			}
+			if let bgColor = title.backgroundColor {
+				titleLabel.backgroundColor = bgColor
+			}
+			if let color = title.fontColor {
+				titleLabel.textColor = color
+			}
+			self.addSubview(titleLabel)
+		}
+		
 		self.backgroundColor = tableView.backgroundColors.header
 		
+		let top = table.title == nil ? 0 : partHeight
 		var totalWidthRate: CGFloat = 0
 		for column in table.columns {
 			totalWidthRate += column.widthRate
@@ -248,11 +287,11 @@ fileprivate class SLHSimpleHeaderView: UIView {
 		let partWidth: CGFloat = (frame.width - 2 * left) / totalWidthRate
 		
 		for column in table.columns {
-			let label = UILabel(frame: CGRect(x: left, y: 0, width: partWidth * column.widthRate, height: frame.height))
+			let label = UILabel(frame: CGRect(x: left, y: top, width: partWidth * column.widthRate, height: partHeight))
 			label.text = column.title
 			label.textColor = tableView.textColors.header
 			if tableView.fonts.header == nil {
-				label.setFontSize(tableView.fontSizes.header)
+				label.font = UIFont.systemFont(ofSize: tableView.fontSizes.header)
 			} else {
 				label.font = UIFont(name: tableView.fonts.header!, size: tableView.fontSizes.header)
 			}
@@ -299,7 +338,7 @@ fileprivate class SLHSimpleRowView: UITableViewCell {
 				label.text = (row.cells[i] as! SLHSimpleTextCell).text
 				label.textColor = (row.cells[i] as! SLHSimpleTextCell).color ?? tableView.textColors.row
 				if tableView.fonts.row == nil {
-					label.setFontSize(tableView.fontSizes.row)
+					label.font = UIFont.systemFont(ofSize: tableView.fontSizes.row)
 				} else {
 					label.font = UIFont(name: tableView.fonts.row!, size: tableView.fontSizes.row)
 				}
@@ -342,7 +381,7 @@ fileprivate class SLHSimpleFooterView: UIView {
 				label.text = (table.footer!.cells[i] as! SLHSimpleTextCell).text
 				label.textColor = tableView.textColors.footer
 				if tableView.fonts.footer == nil {
-					label.setFontSize(tableView.fontSizes.footer)
+					label.font = UIFont.systemFont(ofSize: tableView.fontSizes.footer)
 				} else {
 					label.font = UIFont(name: tableView.fonts.footer!, size: tableView.fontSizes.footer)
 				}
@@ -372,7 +411,7 @@ fileprivate class SLHNoItemInfoRow: UITableViewCell {
 		)
 		super.textLabel?.textColor = tableView.textColors.row
 		if tableView.fonts.row == nil {
-			super.textLabel?.setFontSize(tableView.fontSizes.row)
+			super.textLabel?.font = UIFont.systemFont(ofSize: tableView.fontSizes.row)
 		} else {
 			super.textLabel?.font = UIFont(name: tableView.fonts.row!, size: tableView.fontSizes.row)
 		}
