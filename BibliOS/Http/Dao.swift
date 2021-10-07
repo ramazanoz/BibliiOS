@@ -94,6 +94,16 @@ open class Dao: NSObject {
     public func setBodyData(_ data: MetaObject) {
         self.bodyData = data
     }
+	
+	public func setSuccessAction(_ action: @escaping DaoSuccessAction) -> Dao {
+		self.successAction = action
+		return self
+	}
+	
+	public func setFailAction(_ action: @escaping DaoFailAction) -> Dao {
+		self.failAction = action
+		return self
+	}
     
     // Override to customize
     public func pause() { }
@@ -106,13 +116,15 @@ open class Dao: NSObject {
     
     // Override to customize
     open func requestDidSuccess(_ data: Any? = nil) {
-        self.delegate?.dao(didSuccess: self, data: data) ?? self.successAction?(self, data)
+        self.delegate?.dao(didSuccess: self, data: data)
+		self.successAction?(self, data)
 //        debugPrint(String(describing: self.classForCoder) + " / requestDidSuccess")
     }
     
     // Override to customize
     open func requestDidFail(_ error: DaoError) {
-        self.delegate?.dao(didFail: self, error: error) ?? self.failAction?(self, error)
+        self.delegate?.dao(didFail: self, error: error)
+		self.failAction?(self, error)
         debugPrint(String(describing: self.classForCoder) + " / requestDidFail")
         self.cancel()
     }
