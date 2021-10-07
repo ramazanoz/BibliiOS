@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1737C3D02708B02200771852 /* SLHIconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1737C3CF2708B02200771852 /* SLHIconButton.swift */; };
 		178EE6D322B8216D0081B0E0 /* SLHSimpleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178EE6CA22B8216D0081B0E0 /* SLHSimpleTableView.swift */; };
 		17FA8F0222D3ED4B0096B86C /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17FA8EF522D3ED450096B86C /* Alamofire.framework */; };
 		6F000DE32237D6BF0075CD16 /* AKPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F000DE22237D6BF0075CD16 /* AKPickerView.swift */; };
@@ -81,6 +82,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1737C3CF2708B02200771852 /* SLHIconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLHIconButton.swift; sourceTree = "<group>"; };
 		178EE6CA22B8216D0081B0E0 /* SLHSimpleTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLHSimpleTableView.swift; sourceTree = "<group>"; };
 		17FA8EE922D3ED450096B86C /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "Frameworks/Alamofire-4.7.3/Alamofire.xcodeproj"; sourceTree = "<group>"; };
 		30F94DEA9DFBADBAF224CC4A /* Pods-BibliOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BibliOS.release.xcconfig"; path = "Target Support Files/Pods-BibliOS/Pods-BibliOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 			children = (
 				6F000DE22237D6BF0075CD16 /* AKPickerView.swift */,
 				6F000DE42237D7400075CD16 /* APJTextPickerView.swift */,
+				1737C3CF2708B02200771852 /* SLHIconButton.swift */,
 				6F000DE62237D77E0075CD16 /* SLHQuantityPickerView.swift */,
 				6F000DE82237D7FD0075CD16 /* SLHSigningView.swift */,
 				178EE6CA22B8216D0081B0E0 /* SLHSimpleTableView.swift */,
@@ -397,6 +400,7 @@
 				6F000DE52237D7400075CD16 /* APJTextPickerView.swift in Sources */,
 				6F82F17522370060005A09F7 /* SLHAnimationView.swift in Sources */,
 				6F82F151223650DD005A09F7 /* AlamofireFileDownloader.swift in Sources */,
+				1737C3D02708B02200771852 /* SLHIconButton.swift in Sources */,
 				6F2198DA2235AB7E000562AC /* Base.swift in Sources */,
 				6F000DED2237D9F70075CD16 /* SLHTabView.swift in Sources */,
 				6F000DE32237D6BF0075CD16 /* AKPickerView.swift in Sources */,
