@@ -155,7 +155,7 @@ public extension Double {
 	}
     
 	func stringValue(trimDecimalIfInt: Bool = false) -> String {
-		return self.isInteger ? String(self.intValue) : String(self)
+		return trimDecimalIfInt && self.isInteger ? String(self.intValue) : String(self)
 	}
 }
 
