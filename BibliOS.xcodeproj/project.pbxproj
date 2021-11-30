@@ -85,7 +85,6 @@
 		1737C3CF2708B02200771852 /* SLHIconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLHIconButton.swift; sourceTree = "<group>"; };
 		178EE6CA22B8216D0081B0E0 /* SLHSimpleTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLHSimpleTableView.swift; sourceTree = "<group>"; };
 		17FA8EE922D3ED450096B86C /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = "Frameworks/Alamofire-4.7.3/Alamofire.xcodeproj"; sourceTree = "<group>"; };
-		30F94DEA9DFBADBAF224CC4A /* Pods-BibliOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BibliOS.release.xcconfig"; path = "Target Support Files/Pods-BibliOS/Pods-BibliOS.release.xcconfig"; sourceTree = "<group>"; };
 		6F000DE22237D6BF0075CD16 /* AKPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AKPickerView.swift; sourceTree = "<group>"; };
 		6F000DE42237D7400075CD16 /* APJTextPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APJTextPickerView.swift; sourceTree = "<group>"; };
 		6F000DE62237D77E0075CD16 /* SLHQuantityPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLHQuantityPickerView.swift; sourceTree = "<group>"; };
@@ -105,7 +104,6 @@
 		6F8393942232B3EE007211C1 /* Definitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definitions.swift; sourceTree = "<group>"; };
 		6F8393982232BC72007211C1 /* Dao.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dao.swift; sourceTree = "<group>"; };
 		6F83939D2232D0A4007211C1 /* Methods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Methods.swift; sourceTree = "<group>"; };
-		F70CBB8AAB8F7274C8D39C67 /* Pods-BibliOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BibliOS.debug.xcconfig"; path = "Target Support Files/Pods-BibliOS/Pods-BibliOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,7 +162,6 @@
 				6F83937222328F5C007211C1 /* BibliOS */,
 				6F83937122328F5C007211C1 /* Products */,
 				75D242D77785ED22549A0E55 /* Frameworks */,
-				7314EE29FC24C1B6D699F795 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -211,15 +208,6 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
-		7314EE29FC24C1B6D699F795 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				F70CBB8AAB8F7274C8D39C67 /* Pods-BibliOS.debug.xcconfig */,
-				30F94DEA9DFBADBAF224CC4A /* Pods-BibliOS.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		75D242D77785ED22549A0E55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,7 +234,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6F83937822328F5C007211C1 /* Build configuration list for PBXNativeTarget "BibliOS" */;
 			buildPhases = (
-				8CE0797988E637C4F0B67C47 /* [CP] Check Pods Manifest.lock */,
 				6F83936B22328F5C007211C1 /* Headers */,
 				6F83936C22328F5C007211C1 /* Sources */,
 				6F83936D22328F5C007211C1 /* Frameworks */,
@@ -361,27 +348,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		8CE0797988E637C4F0B67C47 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BibliOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6F83936C22328F5C007211C1 /* Sources */ = {
@@ -536,7 +502,6 @@
 		};
 		6F83937922328F5C007211C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F70CBB8AAB8F7274C8D39C67 /* Pods-BibliOS.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -571,7 +536,6 @@
 		};
 		6F83937A22328F5C007211C1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30F94DEA9DFBADBAF224CC4A /* Pods-BibliOS.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
