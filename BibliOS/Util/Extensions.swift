@@ -16,7 +16,8 @@ public extension Date {
         return DateUtil.getSharedDateFormatter(format: format).string(from: self)
     }
     
-    func toDayDate(_ format: String = "yyyy-MM-dd") -> Date? { return DateUtil.createDate(date: self.addingTimeInterval(86400).toString(format), format: format) }
+    func toDayDate(_ format: String = "yyyy-MM-dd") -> Date? {
+        return DateUtil.createDate(date: self.addingTimeInterval(86400).toString(format), format: format) }
     
 }
 
