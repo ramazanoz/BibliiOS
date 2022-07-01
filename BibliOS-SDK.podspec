@@ -19,11 +19,11 @@ Pod::Spec.new do |s|
 
   s.description      = 'This framework is a tool to make payment in your app.'
 
-  s.homepage         = 'https://inventivtech@dev.azure.com/inventivtech/SDK-Tutorial/_git/SDK-Tutorial-Test'
+  s.homepage         = 'https://github.com/ramazanoz/BibliiOS.git'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Ramazan Öz' => 'ramazan.oz@inventiv.com.tr' }
-  s.source           = { :git => 'https://inventivtech@dev.azure.com/inventivtech/SDK-Tutorial/_git/SDK-Tutorial-Test', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/ramazanoz/BibliiOS.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
