@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'BibliOS-SDK'
-  s.version          = '0.0.2'
+  s.version          = '0.0.3'
   s.summary          = 'This framework is a tool to make payments.'
 
 # This description is used to generate tags and improve search results.
